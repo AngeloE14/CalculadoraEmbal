@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <!-- Favicon de la página -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="256x256" href="assets/images/favicon.png?v=2" />
+  <title>CalcEmbal | Formulador Arterial</title>
+  <meta name="description" content="Calculadora arterial  para embalsamamiento."/>
+  <link rel="canonical" href="https://angeloe14.github.io/FEmbal/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="CalcEmbal | Formulador Arterial" />
+  <meta property="og:url" content="https://angeloe14.github.io/FEmbal/" />
+  <!-- Fuentes de Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="assets/js/theme-init.js"></script>
+  <!-- Hoja de estilos principal -->
+  <link rel="preload" href="assets/css/style.css?v=20260502b" as="style" />
+  <link rel="stylesheet" href="assets/css/style.css?v=20260502b" />
+</head>
+<body>
+  <button class="theme-toggle theme-toggle-hero theme-toggle-floating" id="themeToggle" type="button" aria-label="Cambiar a modo oscuro" aria-pressed="false">
+    <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
+    <span class="theme-toggle__text">Modo oscuro</span>
+  </button>
+  <!-- Panel principal de la aplicación -->
+  <main class="panel">
+    <!-- Sección del encabezado con el logo -->
+    <section class="logo-head" aria-label="Logo institucional">
+      <div class="logo-season logo-season--spring">
+        <div class="spring-petals" aria-hidden="true">
+          <span class="spring-petal spring-petal--1"></span>
+          <span class="spring-petal spring-petal--2"></span>
+          <span class="spring-petal spring-petal--3"></span>
+          <span class="spring-petal spring-petal--4"></span>
+          <span class="spring-petal spring-petal--5"></span>
+          <span class="spring-petal spring-petal--6"></span>
+        </div>
+        <img src="assets/images/logo-circular.png" alt="Logo Escuela de Artes Mortuorias del Sureste" width="220" height="220" loading="eager" decoding="async" fetchpriority="high" />
+      </div>
+    </section>
+
+    <!-- Sección del héroe con título y descripción -->
+    <section class="hero">
+      <div class="hero-top">
+        <h1>Calculadora de Solución Arterial</h1>
+      </div>
+      <p>
+        Define los parámetros y obtén una solución arterial precisa.
+      </p>
+    </section>
+
+    <!-- Layout en dos columnas: formulario y resultados -->
+    <section class="layout">
+      <!-- Formulario de entrada de datos -->
+      <article class="box">
+        <div class="field">
+          <label for="concentrado">Concentración del químico arterial en botella (%)</label>
+          <input id="concentrado" type="number" min="0.1" step="0.1" placeholder="Ej. 30" autocomplete="off" inputmode="decimal" />
+          <label for="comboConcentrado" class="combo-label">Selecciona un químico arterial</label>
+          <div class="custom-select" id="comboConcentrado">
+            <div class="select-selected">Selecciona un químico🧪</div>
+            <div class="select-items select-hide">
+              <div class="select-item" data-value="26"><img src="assets/images/Hydrasil_Arterial_26_thumb.jpeg" alt="Hydrasil Arterial 26" width="48" height="48" loading="lazy" decoding="async"> <span>Hydrasil Arterial 26</span></div>
+              <div class="select-item" data-value="31"><img src="assets/images/Hydrasil_Arterial_31_thumb.jpeg" alt="Hydrasil Arterial 31" width="48" height="48" loading="lazy" decoding="async"> <span>Hydrasill Arterial 31</span></div>
+              <div class="select-item" data-value="8"><img src="assets/images/Jaundice_Hydrasil_Arterial_thumb.jpeg" alt="Jaundice Hydrasil Arterial" width="48" height="48" loading="lazy" decoding="async"> <span>Jaundice Hydrasil Arterial</span></div>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="peso">Peso estimado (kg)</label>
+            <input id="peso" type="number" min="1" step="1" placeholder="Opcional. Ej. 80" autocomplete="off" inputmode="decimal" />
+          </div>
+          <div class="field">
+            <label for="volumenPreparar">Volumen final a preparar (litros)</label>
+            <input id="volumenPreparar" type="number" min="0.1" step="0.1" placeholder="Ej. 2" autocomplete="off" inputmode="decimal" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="objetivo">Concentración deseada en el tanque (%)</label>
+          <input id="objetivo" type="number" min="0.1" step="0.1" placeholder="Si lo dejas vacío, se calcula automáticamente" autocomplete="off" inputmode="decimal" />
+        </div>
+
+        <div class="presets" aria-label="Ajustes rápidos de concentración">
+          <button class="chip" type="button" data-preset="baja" data-min="0.1" data-max="1.99" data-set="0.1" aria-pressed="false">🟢 Baja 0.1~1.99%</button>
+          <button class="chip" type="button" data-preset="media" data-min="2" data-max="3.99" data-set="2" aria-pressed="false">🟡 Media 2.0~3.99%</button>
+          <button class="chip" type="button" data-preset="fuerte" data-min="4" data-set="4" aria-pressed="false">🔴 Fuerte +4.0%</button>
+        </div>
+
+        <p class="auto-hint" role="status">Calculo en tiempo real.</p>
+        <p class="notes">
+          <b>Base del cálculo:</b> Si escribes volumen final, se usa ese total exacto. Si lo dejas vacío,
+          se estima por peso. Dilución <code>C1·V1 = C2·V2</code>.
+        </p>
+      </article>
+
+      <!-- Resultados del cálculo -->
+      <article class="box box-results">
+        <h2>Formula arterial recomendada</h2>
+
+        <div class="result-main">
+          <div class="value" id="quimicoMl">Completa el perfil para calcular</div>
+          <div class="sub" id="quimicoOz">—</div>
+        </div>
+
+        <div class="mix-progress" aria-live="polite">
+          <div class="mix-progress__head">
+            <span id="mixChemicalPct">Arterial: —</span>
+            <span id="mixWaterPct">Agua: —</span>
+          </div>
+          <div class="mix-progress__track" role="img" aria-label="Proporción visual de arterial y agua en la mezcla">
+            <div class="mix-progress__bar mix-progress__bar--chemical" id="mixChemicalBar"></div>
+            <div class="mix-progress__bar mix-progress__bar--water" id="mixWaterBar"></div>
+          </div>
+          <p class="mix-progress__explain" id="mixExplain">
+            Completa los datos para ver la distribución exacta de la solución.
+          </p>
+        </div>
+
+        <div class="mini-grid">
+          <div class="tile">
+            <strong>💧 Agua exacta</strong>
+            <span id="aguaMl">—</span>
+          </div>
+          <div class="tile">
+            <strong>⚗️ Concentración final</strong>
+            <span id="verificacion">—</span>
+          </div>
+          <div class="tile">
+            <strong>📦 Volumen total</strong>
+            <span id="volumenFinal">—</span>
+          </div>
+          <div class="tile">
+            <strong>🧪 Co-inyectante</strong>
+            <span id="coinyectante">—</span>
+          </div>
+          <div class="tile">
+            <strong>🧷 Modificador especial</strong>
+            <span id="modificadorEspecial">—</span>
+          </div>
+        </div>
+
+        <section class="formula-card">
+          <h3>Fórmula detallada</h3>
+          <p id="formulaVolume">—</p>
+          <p id="formulaConcentration">—</p>
+          <p id="formulaFinal">—</p>
+        </section>
+
+        <div class="alert error" id="error"></div>
+        <div class="share-actions">
+          <button class="share-button" id="shareResultButton" type="button">
+            📤 Compartir resultado
+          </button>
+          <p class="share-feedback" id="shareFeedback" role="status" aria-live="polite">
+            <img src="assets/images/logo-circular.png" alt="Logo CalcEmbal" width="24" height="24" loading="lazy" decoding="async" />
+            <span id="shareFeedbackText"></span>
+          </p>
+        </div>
+
+        <p class="notes">
+          <b>Rutina práctica:</b> Carga primero agua, añade coinyección y modificadores, incorpora el arterial
+          concentrado, completa volumen y reevalúa drenaje, distensión y necesidad de refuerzo en cada etapa.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  
+  <script src="assets/js/script.js?v=20260502b"></script>
+</body>
+</html>

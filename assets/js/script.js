@@ -1207,6 +1207,52 @@ function setupInputListeners() {
   });
 }
 
+function setupAudioCarga() {
+  const audio = document.getElementById("audioCarga");
+  if (!audio) {
+    return;
+  }
+
+  // Sonido sutil al cargar la pagina.
+  audio.volume = 0.3;
+  let yaReproducido = false;
+
+  const intentarReproducir = (mostrarBloqueo = false) => {
+    if (yaReproducido) {
+      return;
+    }
+
+    const intento = audio.play();
+    if (intento && typeof intento.then === "function") {
+      intento
+        .then(() => {
+          yaReproducido = true;
+        })
+        .catch(() => {
+          if (mostrarBloqueo) {
+            console.log("El navegador bloqueó la reproducción automática.");
+          }
+        });
+      return;
+    }
+
+    // Fallback para navegadores antiguos que no devuelven promesa.
+    yaReproducido = true;
+  };
+
+  // Intenta autoplay una sola vez al terminar de construir el DOM.
+  intentarReproducir(true);
+
+  // Si el navegador bloquea autoplay, intenta en la primera interacción.
+  const reproducirEnPrimeraInteraccion = () => {
+    intentarReproducir(false);
+  };
+
+  document.addEventListener("click", reproducirEnPrimeraInteraccion, { once: true, passive: true });
+  document.addEventListener("touchstart", reproducirEnPrimeraInteraccion, { once: true, passive: true });
+  document.addEventListener("keydown", reproducirEnPrimeraInteraccion, { once: true });
+}
+
 function initialize() {
   setupThemeToggle();
   setupCustomSelect();
@@ -1230,5 +1276,9 @@ function initialize() {
     lastCaseSignature = "";
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupAudioCarga();
+});
 
 initialize();

@@ -1767,7 +1767,8 @@ input[readonly]:focus {
 }
 
 /* Tarjeta completa: icono + texto perfectamente alineados */
-.redes-sociales__enlace {
+.redes-sociales__enlace,
+.boton-red {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1787,35 +1788,42 @@ input[readonly]:focus {
     border-color 0.16s ease;
 }
 
-:root[data-theme="dark"] .redes-sociales__enlace {
+:root[data-theme="dark"] .redes-sociales__enlace,
+:root[data-theme="dark"] .boton-red {
   background: linear-gradient(145deg, rgba(19, 34, 45, 0.95), rgba(13, 24, 33, 0.9));
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .redes-sociales__enlace {
+  :root:not([data-theme]) .redes-sociales__enlace,
+  :root:not([data-theme]) .boton-red {
     background: linear-gradient(145deg, rgba(19, 34, 45, 0.95), rgba(13, 24, 33, 0.9));
   }
 }
 
 .redes-sociales__enlace img,
-.redes-sociales__enlace svg {
+.redes-sociales__enlace svg,
+.boton-red img,
+.boton-red svg {
   inline-size: 24px;
   block-size: 24px;
   display: block;
   flex-shrink: 0;
 }
 
-.redes-sociales__enlace img {
+.redes-sociales__enlace img,
+.boton-red img {
   object-fit: contain;
 }
 
-.redes-sociales__enlace span {
+.redes-sociales__enlace span,
+.boton-red span {
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.15px;
 }
 
-.redes-sociales__enlace svg {
+.redes-sociales__enlace svg,
+.boton-red svg {
   fill: currentColor;
 }
 
@@ -1861,6 +1869,7 @@ input[readonly]:focus {
   .redes-sociales {
     margin: 0.1rem 0.95rem 1rem;
     padding: 0.85rem;
+    box-sizing: border-box;
   }
 
   .redes-sociales__titulo {
@@ -1868,21 +1877,33 @@ input[readonly]:focus {
     font-size: 0.86rem;
   }
 
+  /* En movil forzamos columna para evitar filas comprimidas */
   .redes-sociales__lista {
-    grid-template-columns: 1fr;
-    gap: 0.54rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
   }
 
-  .redes-sociales__enlace {
+  .redes-sociales__enlace,
+  .boton-red {
     width: 100%;
-    padding: 0.75rem 0.78rem;
-    gap: 0.58rem;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    /* Evitamos layouts conflictivos en movil */
+    position: static;
+    float: none;
   }
 
   .redes-sociales__enlace img,
-  .redes-sociales__enlace svg {
-    inline-size: 22px;
-    block-size: 22px;
+  .redes-sociales__enlace svg,
+  .boton-red img,
+  .boton-red svg {
+    inline-size: 20px;
+    block-size: 20px;
   }
 }
 

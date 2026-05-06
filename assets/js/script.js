@@ -1213,44 +1213,63 @@ function setupAudioCarga() {
     return;
   }
 
-  // Sonido sutil al cargar la pagina.
-  audio.volume = 0.3;
-  let yaReproducido = false;
+  // En moviles se percibe mejor con un volumen moderado.
+  audio.volume = 0.55;
+  audio.load();
 
-  const intentarReproducir = (mostrarBloqueo = false) => {
-    if (yaReproducido) {
+  let yaReproducido = false;
+  let intentoEnCurso = false;
+
+  const removerEventosDeRespaldo = () => {
+    document.removeEventListener("pointerdown", reproducirEnInteraccion);
+    document.removeEventListener("touchstart", reproducirEnInteraccion);
+    document.removeEventListener("click", reproducirEnInteraccion);
+    document.removeEventListener("keydown", reproducirEnInteraccion);
+  };
+
+  const intentarReproducir = async (mostrarBloqueo = false) => {
+    if (yaReproducido || intentoEnCurso) {
       return;
     }
 
+    intentoEnCurso = true;
     const intento = audio.play();
     if (intento && typeof intento.then === "function") {
-      intento
-        .then(() => {
-          yaReproducido = true;
-        })
-        .catch(() => {
-          if (mostrarBloqueo) {
-            console.log("El navegador bloqueó la reproducción automática.");
-          }
-        });
+      try {
+        await intento;
+        yaReproducido = true;
+        removerEventosDeRespaldo();
+      } catch {
+        if (mostrarBloqueo) {
+          console.log("El navegador bloqueó la reproducción automática.");
+        }
+      } finally {
+        intentoEnCurso = false;
+      }
       return;
     }
 
     // Fallback para navegadores antiguos que no devuelven promesa.
     yaReproducido = true;
+    intentoEnCurso = false;
+    removerEventosDeRespaldo();
   };
 
-  // Intenta autoplay una sola vez al terminar de construir el DOM.
-  intentarReproducir(true);
-
-  // Si el navegador bloquea autoplay, intenta en la primera interacción.
-  const reproducirEnPrimeraInteraccion = () => {
+  // Reintenta en interacciones reales del usuario hasta que se reproduzca.
+  const reproducirEnInteraccion = () => {
     intentarReproducir(false);
   };
 
-  document.addEventListener("click", reproducirEnPrimeraInteraccion, { once: true, passive: true });
-  document.addEventListener("touchstart", reproducirEnPrimeraInteraccion, { once: true, passive: true });
-  document.addEventListener("keydown", reproducirEnPrimeraInteraccion, { once: true });
+  document.addEventListener("pointerdown", reproducirEnInteraccion, { passive: true });
+  document.addEventListener("touchstart", reproducirEnInteraccion, { passive: true });
+  document.addEventListener("click", reproducirEnInteraccion, { passive: true });
+  document.addEventListener("keydown", reproducirEnInteraccion);
+
+  // Intenta autoplay al cargar y tambien cuando el audio ya puede reproducirse.
+  intentarReproducir(true);
+  audio.addEventListener("canplay", () => {
+    intentarReproducir(true);
+  }, { once: true });
 }
 
 function initialize() {

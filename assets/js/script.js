@@ -15,7 +15,6 @@ const PRESERVATION_PROFILES = {
     label: "Suave",
     baseTarget: 1.85,
     volumeFactor: 0.96,
-    coinjectionOzPerGal: 10,
     pressure: "20-28 psi",
     flow: "8-10 fl oz/min",
     technique: "Inyeccion cervical simple con drenaje intermitente.",
@@ -24,7 +23,6 @@ const PRESERVATION_PROFILES = {
     label: "Profesional estandar",
     baseTarget: 2.25,
     volumeFactor: 1,
-    coinjectionOzPerGal: 12,
     pressure: "25-35 psi",
     flow: "8-12 fl oz/min",
     technique: "Cervical estandar con drenaje intermitente.",
@@ -33,7 +31,6 @@ const PRESERVATION_PROFILES = {
     label: "Firme",
     baseTarget: 2.8,
     volumeFactor: 1.05,
-    coinjectionOzPerGal: 14,
     pressure: "30-40 psi",
     flow: "8-12 fl oz/min",
     technique: "Cervical con control mas cerrado del drenaje.",
@@ -42,7 +39,6 @@ const PRESERVATION_PROFILES = {
     label: "Alta preservacion",
     baseTarget: 3.25,
     volumeFactor: 1.1,
-    coinjectionOzPerGal: 18,
     pressure: "40-55 psi",
     flow: "8-10 fl oz/min",
     technique: "Trabajo por etapas con reevaluacion frecuente.",
@@ -87,7 +83,7 @@ const DECOMPOSITION_PROFILES = {
     concentrationDelta: 0.35,
     pressure: "35-45 psi",
     flow: "8-10 fl oz/min",
-    technique: "Refuerza coinyeccion y vigila distribucion en cada etapa.",
+    technique: "Refuerza la distribucion y vigila cada etapa de inyeccion.",
   },
   moderada: {
     label: "Moderada",
@@ -130,8 +126,6 @@ const dom = {
   aguaMl: document.getElementById("aguaMl"),
   verificacion: document.getElementById("verificacion"),
   volumenFinal: document.getElementById("volumenFinal"),
-  coinyectante: document.getElementById("coinyectante"),
-  modificadorEspecial: document.getElementById("modificadorEspecial"),
   perfilResumen: document.getElementById("perfilResumen"),
   presionSugerida: document.getElementById("presionSugerida"),
   flujoSugerido: document.getElementById("flujoSugerido"),
@@ -167,6 +161,7 @@ const SHOULD_ANIMATE_RESULTS = !reducedMotionPreference.matches && !coarsePointe
 let selectedConcentradoValue = "";
 let currentTheme = getInitialTheme();
 let resultAnimationTimerId = null;
+let resultAnimationFrameId = 0;
 let scheduledCalculationFrame = 0;
 let scheduledCalculationTimerId = 0;
 let lastResultSignature = "";
@@ -306,8 +301,6 @@ function clearResults() {
   setNodeText(dom.aguaMl, "—");
   setNodeText(dom.verificacion, "—");
   setNodeText(dom.volumenFinal, "—");
-  setNodeText(dom.coinyectante, "—");
-  setNodeText(dom.modificadorEspecial, "—");
   if (dom.perfilResumen) {
     setNodeText(dom.perfilResumen, "—");
   }
@@ -456,8 +449,15 @@ function updateResultsDisplay() {
   }
 
   dom.resultsBox.classList.remove("is-updating");
-  void dom.resultsBox.offsetWidth;
-  dom.resultsBox.classList.add("is-updating");
+
+  if (resultAnimationFrameId) {
+    window.cancelAnimationFrame(resultAnimationFrameId);
+  }
+
+  resultAnimationFrameId = window.requestAnimationFrame(() => {
+    resultAnimationFrameId = 0;
+    dom.resultsBox.classList.add("is-updating");
+  });
 
   if (resultAnimationTimerId) {
     window.clearTimeout(resultAnimationTimerId);
@@ -573,8 +573,6 @@ function buildRecommendation(caseData) {
   const alerts = [];
   const profileTags = [];
   const concentrationAdjustments = [];
-  const volumeFactors = [];
-  const modifierParts = [];
 
   const preservation = PRESERVATION_PROFILES[caseData.preservacion];
   const complexion = COMPLEXION_PROFILES[caseData.complexion];
@@ -584,14 +582,7 @@ function buildRecommendation(caseData) {
 
   let volumeFactor = preservation.volumeFactor * complexion.volumeFactor * decomposition.volumeFactor;
   let targetCandidate = baseObjective + complexion.concentrationDelta + decomposition.concentrationDelta;
-  let coinjectionOzPerGal = preservation.coinjectionOzPerGal;
-  let modifierOzPerGal = 4;
 
-  volumeFactors.push({ label: preservation.label, factor: preservation.volumeFactor });
-  volumeFactors.push({ label: complexion.label, factor: complexion.volumeFactor });
-  if (decomposition.volumeFactor !== 1) {
-    volumeFactors.push({ label: decomposition.label, factor: decomposition.volumeFactor });
-  }
   if (complexion.concentrationDelta) {
     pushAdjustment(concentrationAdjustments, complexion.label, complexion.concentrationDelta);
   }
@@ -602,24 +593,19 @@ function buildRecommendation(caseData) {
   if (caseData.condiciones.obesidad) {
     volumeFactor *= 1.08;
     targetCandidate += pushAdjustment(concentrationAdjustments, "obesidad", -0.15);
-    volumeFactors.push({ label: "obesidad", factor: 1.08 });
     profileTags.push("obesidad");
   }
 
   if (caseData.condiciones.desnutricion) {
     volumeFactor *= 0.97;
     targetCandidate += pushAdjustment(concentrationAdjustments, "demacrado", 0.2);
-    volumeFactors.push({ label: "demacrado", factor: 0.97 });
     profileTags.push("desnutricion");
   }
 
   if (caseData.condiciones.edema) {
     volumeFactor *= 1.12;
     targetCandidate += pushAdjustment(concentrationAdjustments, "edema", -0.2);
-    modifierOzPerGal += 12;
-    volumeFactors.push({ label: "edema", factor: 1.12 });
     profileTags.push("edema");
-    modifierParts.push("control de edema");
   }
 
   if (caseData.condiciones.deshidratacion) {
@@ -630,35 +616,25 @@ function buildRecommendation(caseData) {
   if (caseData.condiciones.autopsia) {
     volumeFactor *= 1.15;
     targetCandidate += pushAdjustment(concentrationAdjustments, "autopsia", 0.25);
-    coinjectionOzPerGal += 6;
-    modifierOzPerGal += 6;
-    volumeFactors.push({ label: "autopsia", factor: 1.15 });
     profileTags.push("autopsia");
-    modifierParts.push("tratamiento de autopsia");
   }
 
   if (caseData.condiciones.trauma) {
     volumeFactor *= 1.08;
     targetCandidate += pushAdjustment(concentrationAdjustments, "trauma", 0.25);
-    modifierOzPerGal += 6;
-    volumeFactors.push({ label: "trauma", factor: 1.08 });
     profileTags.push("trauma");
-    modifierParts.push("soporte para trauma");
   }
 
   if (caseData.condiciones.refrigeracion) {
     volumeFactor *= 1.05;
     targetCandidate += pushAdjustment(concentrationAdjustments, "refrigeracion", 0.2);
-    coinjectionOzPerGal += 4;
-    volumeFactors.push({ label: "refrigeracion", factor: 1.05 });
     profileTags.push("refrigeracion");
   }
 
   if (caseData.condiciones.ictericia) {
     profileTags.push("ictericia");
     if (caseData.concentrado !== null && caseData.concentrado <= 12) {
-      coinjectionOzPerGal = 0;
-      alerts.push("Ictericia: si usas un arterial especial de bajo indice, evita coinyeccion adicional.");
+      alerts.push("Ictericia: usa arterial especial de bajo indice y controla la respuesta de color.");
     }
   }
 
@@ -715,16 +691,14 @@ function buildRecommendation(caseData) {
     };
   }
 
-  const coinjectionMl = coinjectionOzPerGal * finalVolumeGallons * ML_PER_OZ;
-  const modifierMl = modifierOzPerGal * finalVolumeGallons * ML_PER_OZ;
+  // Mezcla simplificada: solo arterial + agua.
   const arterialMl = (finalTarget * totalSolutionMl) / caseData.concentrado;
-  const waterMl = totalSolutionMl - (arterialMl + coinjectionMl + modifierMl);
-  const totalRealMl = arterialMl + waterMl + coinjectionMl + modifierMl;
+  const waterMl = totalSolutionMl - arterialMl;
 
   if (waterMl < 0) {
     return {
       ok: false,
-      error: "El volumen de aditivos excede el volumen total",
+      error: "El volumen de agua resulto negativo; revisa los datos de entrada.",
       alerts,
     };
   }
@@ -759,9 +733,6 @@ function buildRecommendation(caseData) {
     techniqueNotes.push("Controla color y prefiere sistema especial para ictericia.");
   }
 
-  const modifierLabelParts = ["buffer/acondicionador"];
-  modifierParts.forEach((part) => modifierLabelParts.push(part));
-
   const concentrationText =
     concentrationAdjustments.length > 0
       ? concentrationAdjustments
@@ -790,9 +761,6 @@ function buildRecommendation(caseData) {
     totalSolutionMl,
     arterialMl,
     waterMl,
-    coinjectionMl,
-    modifierMl,
-    totalRealMl,
     pressure,
     flow,
     technique: techniqueNotes.join(" "),
@@ -806,8 +774,8 @@ function buildRecommendation(caseData) {
       `Concentracion final: ${formatNumber(baseObjective, 2)}% base + ${concentrationText} = ${formatNumber(finalTarget, 2)}%.`,
     formulaFinal:
       `Arterial: (${formatNumber(finalTarget, 2)} x ${formatNumber(totalSolutionMl, 0)} ml) / ${formatNumber(caseData.concentrado, 2)} = ` +
-      `${formatNumber(arterialMl, 1)} ml. Agua exacta: ${formatNumber(totalSolutionMl, 0)} - (` +
-      `${formatNumber(arterialMl, 1)} + ${formatNumber(coinjectionMl, 1)} + ${formatNumber(modifierMl, 1)}) = ${formatNumber(waterMl, 1)} ml.`,
+      `${formatNumber(arterialMl, 1)} ml. Agua exacta: ${formatNumber(totalSolutionMl, 0)} - ` +
+      `${formatNumber(arterialMl, 1)} = ${formatNumber(waterMl, 1)} ml.`,
   };
 }
 
@@ -825,11 +793,6 @@ function renderRecommendation(result) {
     dom.volumenFinal,
     `${formatNumber(result.totalSolutionMl / 1000, 2)} L / ${formatNumber(result.totalSolutionMl, 0)} ml`
   );
-  setNodeText(
-    dom.coinyectante,
-    result.coinjectionMl > 0 ? formatMlAndOz(result.coinjectionMl, 0, 1) : "No prioritario"
-  );
-  setNodeText(dom.modificadorEspecial, formatMlAndOz(result.modifierMl, 0, 1));
   if (dom.perfilResumen) {
     setNodeText(dom.perfilResumen, result.profileSummary);
   }
@@ -960,20 +923,8 @@ function generarResumen() {
     `Agua: ${formatNumber(roundToOneDecimal(currentRecommendation.waterMl), 1)} ml`,
   ];
 
-  if (currentRecommendation.coinjectionMl > 0) {
-    volumeLines.push(
-      `Co-inyectante: ${formatNumber(roundToOneDecimal(currentRecommendation.coinjectionMl), 1)} ml`
-    );
-  }
-
-  if (currentRecommendation.modifierMl > 0) {
-    volumeLines.push(
-      `Modificador: ${formatNumber(roundToOneDecimal(currentRecommendation.modifierMl), 1)} ml`
-    );
-  }
-
   volumeLines.push("");
-  volumeLines.push(`Volumen total real: ${formatVolumeMlAndLiters(currentRecommendation.totalRealMl)}`);
+  volumeLines.push(`Volumen total real: ${formatVolumeMlAndLiters(currentRecommendation.totalSolutionMl)}`);
 
   return volumeLines.join("\n");
 }

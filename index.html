@@ -23,12 +23,13 @@
   <link rel="stylesheet" href="assets/css/style.css?v=20260502b" />
 </head>
 <body>
+  <div class="fondo-ambiental" aria-hidden="true"></div>
   <button class="theme-toggle theme-toggle-hero theme-toggle-floating" id="themeToggle" type="button" aria-label="Cambiar a modo oscuro" aria-pressed="false">
     <span class="theme-toggle__icon" aria-hidden="true">🌙</span>
     <span class="theme-toggle__text">Modo oscuro</span>
   </button>
   <!-- Panel principal de la aplicación -->
-  <main class="panel">
+  <main class="panel entrada-elegante">
     <!-- Sección del encabezado con el logo -->
     <section class="logo-head" aria-label="Logo institucional">
       <div class="logo-season logo-season--spring">
@@ -47,7 +48,7 @@
     <!-- Sección del héroe con título y descripción -->
     <section class="hero">
       <div class="hero-top">
-        <h1>Calculadora de Solución Arterial</h1>
+        <h1 class="titulo-principal">Calculadora de Solución Arterial</h1>
       </div>
       <p>
         Define los parámetros y obtén una solución arterial precisa.
@@ -57,7 +58,7 @@
     <!-- Layout en dos columnas: formulario y resultados -->
     <section class="layout">
       <!-- Formulario de entrada de datos -->
-      <article class="box">
+      <article class="box tarjeta-interactiva">
         <div class="field">
           <label for="concentrado">Concentración del químico arterial en botella (%)</label>
           <input id="concentrado" type="number" min="0.1" step="0.1" placeholder="Ej. 30" autocomplete="off" inputmode="decimal" />
@@ -103,15 +104,15 @@
       </article>
 
       <!-- Resultados del cálculo -->
-      <article class="box box-results">
+      <article class="box box-results tarjeta-interactiva panel-resultados">
         <h2>Formula arterial recomendada</h2>
 
-        <div class="result-main">
+        <div class="result-main bloque-resultado">
           <div class="value" id="quimicoMl">Completa el perfil para calcular</div>
           <div class="sub" id="quimicoOz">—</div>
         </div>
 
-        <div class="mix-progress" aria-live="polite">
+        <div class="mix-progress bloque-mezcla" aria-live="polite">
           <div class="mix-progress__head">
             <span id="mixChemicalPct">Arterial: —</span>
             <span id="mixWaterPct">Agua: —</span>
@@ -125,22 +126,22 @@
           </p>
         </div>
 
-        <div class="mini-grid">
-          <div class="tile">
+        <div class="mini-grid resumen-metrico">
+          <div class="tile tarjeta-dato">
             <strong>💧 Agua exacta</strong>
             <span id="aguaMl">—</span>
           </div>
-          <div class="tile">
+          <div class="tile tarjeta-dato">
             <strong>⚗️ Concentración final</strong>
             <span id="verificacion">—</span>
           </div>
-          <div class="tile">
+          <div class="tile tarjeta-dato">
             <strong>📦 Volumen total</strong>
             <span id="volumenFinal">—</span>
           </div>
         </div>
 
-        <section class="formula-card">
+        <section class="formula-card tarjeta-informativa">
           <h3>Fórmula detallada</h3>
           <p id="formulaVolume">—</p>
           <p id="formulaConcentration">—</p>
@@ -149,7 +150,7 @@
 
         <div class="alert error" id="error"></div>
         <div class="share-actions">
-          <button class="share-button" id="shareResultButton" type="button">
+          <button class="share-button boton-principal" id="shareResultButton" type="button">
             📤 Compartir resultado
           </button>
           <p class="share-feedback" id="shareFeedback" role="status" aria-live="polite">
@@ -166,8 +167,8 @@
     </section>
 
     <!-- Sección de redes con estructura estable y clara para desktop y móvil -->
-    <section class="redes-sociales" aria-label="Redes sociales y contacto">
-      <h2 class="redes-sociales__titulo">Redes sociales y contacto</h2>
+    <section class="redes-sociales" aria-label="Redes sociales">
+      <h2 class="redes-sociales__titulo">Redes sociales</h2>
       <nav class="redes-sociales__lista" aria-label="Enlaces de redes sociales">
         <!-- Cada enlace es una tarjeta completa: icono + texto -->
         <a

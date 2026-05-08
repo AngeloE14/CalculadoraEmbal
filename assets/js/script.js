@@ -195,13 +195,16 @@ function setNodeText(node, value) {
   }
 }
 
-function setNodeWidth(node, value) {
+function setNodeScaleX(node, value) {
   if (!node) {
     return;
   }
 
-  if (node.style.width !== value) {
-    node.style.width = value;
+  const normalizedValue = Number.isFinite(value) ? Math.min(Math.max(value, 0), 1) : 0;
+  const nextTransform = `scaleX(${normalizedValue.toFixed(4)})`;
+
+  if (node.style.transform !== nextTransform) {
+    node.style.transform = nextTransform;
   }
 }
 
@@ -318,8 +321,8 @@ function clearResults() {
   setNodeText(dom.formulaFinal, "—");
   setNodeText(dom.mixChemicalPct, "Arterial: —");
   setNodeText(dom.mixWaterPct, "Agua: —");
-  setNodeWidth(dom.mixChemicalBar, "0%");
-  setNodeWidth(dom.mixWaterBar, "0%");
+  setNodeScaleX(dom.mixChemicalBar, 0);
+  setNodeScaleX(dom.mixWaterBar, 0);
   setNodeText(dom.mixExplain, "Completa los datos para ver la distribucion exacta de la solucion.");
   setStatusMessages([
     "Completa el concentrado y el volumen final para obtener una recomendacion profesional.",
@@ -444,11 +447,11 @@ function updateResultsDisplay() {
   }
 
   if (!SHOULD_ANIMATE_RESULTS) {
-    dom.resultsBox.classList.remove("is-updating");
+    dom.resultsBox.classList.remove("is-updating", "panel-resultados--actualizando");
     return;
   }
 
-  dom.resultsBox.classList.remove("is-updating");
+  dom.resultsBox.classList.remove("is-updating", "panel-resultados--actualizando");
 
   if (resultAnimationFrameId) {
     window.cancelAnimationFrame(resultAnimationFrameId);
@@ -456,7 +459,7 @@ function updateResultsDisplay() {
 
   resultAnimationFrameId = window.requestAnimationFrame(() => {
     resultAnimationFrameId = 0;
-    dom.resultsBox.classList.add("is-updating");
+    dom.resultsBox.classList.add("is-updating", "panel-resultados--actualizando");
   });
 
   if (resultAnimationTimerId) {
@@ -464,7 +467,7 @@ function updateResultsDisplay() {
   }
 
   resultAnimationTimerId = window.setTimeout(() => {
-    dom.resultsBox.classList.remove("is-updating");
+    dom.resultsBox.classList.remove("is-updating", "panel-resultados--actualizando");
   }, 520);
 }
 
@@ -472,8 +475,8 @@ function updateMixProgress(arterialMl, waterMl, totalMl) {
   if (!totalMl || totalMl <= 0) {
     setNodeText(dom.mixChemicalPct, "Arterial: 0%");
     setNodeText(dom.mixWaterPct, "Agua: 0%");
-    setNodeWidth(dom.mixChemicalBar, "0%");
-    setNodeWidth(dom.mixWaterBar, "0%");
+    setNodeScaleX(dom.mixChemicalBar, 0);
+    setNodeScaleX(dom.mixWaterBar, 0);
     setNodeText(dom.mixExplain, "Ingresa datos validos.");
     return;
   }
@@ -483,8 +486,8 @@ function updateMixProgress(arterialMl, waterMl, totalMl) {
 
   setNodeText(dom.mixChemicalPct, `Arterial: ${formatNumber(arterialPct, 1)}%`);
   setNodeText(dom.mixWaterPct, `Agua: ${formatNumber(waterPct, 1)}%`);
-  setNodeWidth(dom.mixChemicalBar, `${arterialPct.toFixed(2)}%`);
-  setNodeWidth(dom.mixWaterBar, `${waterPct.toFixed(2)}%`);
+  setNodeScaleX(dom.mixChemicalBar, arterialPct / 100);
+  setNodeScaleX(dom.mixWaterBar, waterPct / 100);
   setNodeText(
     dom.mixExplain,
     `${formatNumber(arterialMl, 0)} ml de arterial y ${formatNumber(waterMl, 0)} ml de agua.`

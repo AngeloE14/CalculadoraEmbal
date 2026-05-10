@@ -4,6 +4,7 @@
  */
 
 import { memo } from 'react';
+import '../styles/components/Calculator.css';
 import { Footer } from './Footer';
 import { FormSection } from './FormSection';
 import { Header } from './Header';

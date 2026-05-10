@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import '../styles/components/HeroSection.css';
 
 /**
  * Bloque hero textual.
@@ -11,7 +12,7 @@ export const HeroSection = memo(function HeroSection() {
       <div className="hero-top">
         <h1 className="titulo-principal">Calculadora de Solución Arterial</h1>
       </div>
-      <p>Define los parámetros y obtén una solución arterial precisa.</p>
+      <p>Define los parámetros y obtén el resultado.</p>
     </section>
   );
 });

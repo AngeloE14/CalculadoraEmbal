@@ -201,10 +201,17 @@ Esta guía responde explícitamente cuatro preguntas por archivo:
 
 ## Estilos
 
-### `src/styles/style.css`
+### `src/styles/global.css`
 
-- **Qué hace**: define tema, layout, animaciones, estados y responsividad.
+- **Qué hace**: define tema, layout, animaciones, estados y responsividad global.
 - **Por qué existe**: preservar estética original y modernizar rendimiento móvil.
-- **Conexiones**: importado por `main.tsx`, usado por todas las clases de componentes.
+- **Conexiones**: importado por `main.tsx`, usado por todas las clases globales.
 - **Origen original**: evolución del CSS tradicional con optimizaciones para React/móvil.
+
+### `src/styles/components/`
+
+- **Qué hace**: guarda estilos específicos para cada componente.
+- **Por qué existe**: separar visuales por responsabilidad y mejorar mantenimiento.
+- **Conexiones**: cada componente importa su propio CSS desde `../styles/components/...`.
+- **Origen original**: refactor de estilos del archivo global único hacia hojas por componente.
 

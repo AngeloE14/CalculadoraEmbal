@@ -4,6 +4,7 @@
  */
 
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import '../styles/components/FormSection.css';
 import { useCalculatorForm } from '../hooks/useCalculator';
 import { DEFAULT_CHEMICAL_LABEL } from '../utils/constants';
 import { parseInputNumber } from '../utils/formatters';

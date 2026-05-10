@@ -2,6 +2,7 @@
  * Botón flotante para alternar tema claro/oscuro.
  */
 
+import '../styles/components/ThemeToggle.css';
 import { useTheme } from '../hooks/useTheme';
 
 export function ThemeToggle() {

@@ -1,0 +1,58 @@
+.mix-progress {
+  margin-bottom: 0.8rem;
+  padding: 0.72rem 0.75rem;
+  border: 1px solid var(--mix-divider);
+  border-radius: 12px;
+  background: var(--tile-result-bg);
+}
+
+.mix-progress__head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--mix-text);
+}
+
+.mix-progress__track {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--mix-track);
+  border: 1px solid var(--mix-divider);
+}
+
+.mix-progress__bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transition: transform 0.36s var(--theme-switch-ease);
+  will-change: transform;
+}
+
+.mix-progress__bar--chemical {
+  left: 0;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(58, 156, 218, 0.88), var(--mix-chemical));
+}
+
+.mix-progress__bar--water {
+  right: 0;
+  transform-origin: right center;
+  background: linear-gradient(90deg, rgba(64, 205, 165, 0.82), var(--mix-water));
+}
+
+.mix-progress__explain {
+  margin: 0.58rem 0 0;
+  font-size: 0.79rem;
+  line-height: 1.36;
+  color: var(--mix-strong);
+}

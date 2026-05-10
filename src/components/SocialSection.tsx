@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import '../styles/components/SocialSection.css';
 
 /**
  * Sección de redes sociales.

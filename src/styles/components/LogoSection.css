@@ -1,0 +1,187 @@
+.logo-head {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.4rem 0.25rem;
+  background:
+    linear-gradient(120deg, var(--hero-bg-a), var(--hero-bg-b)),
+    repeating-linear-gradient(
+      -35deg,
+      rgba(255, 255, 255, 0.06) 0,
+      rgba(255, 255, 255, 0.06) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+}
+
+.logo-season {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+}
+
+.logo-season::before,
+.logo-season::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.logo-season--spring::before {
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 183, 197, 0.96) 0 9px, transparent 9.6px),
+    radial-gradient(circle at 84% 20%, rgba(255, 218, 121, 0.96) 0 8px, transparent 8.6px),
+    radial-gradient(circle at 80% 84%, rgba(174, 243, 191, 0.96) 0 9px, transparent 9.6px),
+    radial-gradient(circle at 16% 80%, rgba(190, 227, 255, 0.96) 0 8px, transparent 8.6px),
+    radial-gradient(circle at 50% 6%, rgba(255, 204, 230, 0.92) 0 8px, transparent 8.6px),
+    radial-gradient(circle at 50% 96%, rgba(190, 255, 235, 0.92) 0 8px, transparent 8.6px);
+  box-shadow: 0 0 0 10px rgba(255, 183, 197, 0.12);
+}
+
+.logo-season--spring::after {
+  inset: -11px;
+  border: 2px dashed rgba(255, 229, 140, 0.66);
+  box-shadow:
+    0 0 0 5px rgba(255, 173, 195, 0.17),
+    0 0 18px rgba(255, 179, 205, 0.28);
+}
+
+.spring-petals {
+  position: absolute;
+  inset: -8px;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+  contain: layout paint;
+}
+
+.spring-petal {
+  --petal-size: 8px;
+  --petal-delay: 0s;
+  --petal-duration: 6.2s;
+  --petal-drift-x: 26px;
+  --petal-drop-y: 120px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: var(--petal-size);
+  height: calc(var(--petal-size) * 0.72);
+  border-radius: 60% 40% 65% 35%;
+  background: linear-gradient(135deg, #ffd7e8, #ffc2da);
+  opacity: 0;
+  transform: translate3d(0, -8px, 0) rotate(0deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spring-petal {
+    will-change: transform, opacity;
+    animation: spring-petal-fall var(--petal-duration) linear infinite;
+    animation-delay: var(--petal-delay);
+  }
+}
+
+.spring-petal--1 {
+  left: 20%;
+  --petal-delay: 0s;
+  --petal-duration: 6.8s;
+  --petal-drift-x: -24px;
+}
+
+.spring-petal--2 {
+  left: 38%;
+  --petal-delay: 1.2s;
+  --petal-duration: 5.6s;
+  --petal-size: 7px;
+  --petal-drift-x: 22px;
+}
+
+.spring-petal--3 {
+  left: 54%;
+  --petal-delay: 0.5s;
+  --petal-duration: 6.2s;
+  --petal-size: 9px;
+  --petal-drift-x: -18px;
+}
+
+.spring-petal--4 {
+  left: 71%;
+  --petal-delay: 1.9s;
+  --petal-duration: 6.5s;
+  --petal-size: 8px;
+  --petal-drift-x: 28px;
+}
+
+.spring-petal--5 {
+  left: 84%;
+  --petal-delay: 0.9s;
+  --petal-duration: 5.9s;
+  --petal-size: 7px;
+  --petal-drift-x: -20px;
+}
+
+.spring-petal--6 {
+  left: 30%;
+  --petal-delay: 2.4s;
+  --petal-duration: 6.7s;
+  --petal-size: 8px;
+  --petal-drift-x: 18px;
+}
+
+@keyframes spring-petal-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0) rotate(0deg);
+  }
+  8% {
+    opacity: 0.95;
+  }
+  72% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--petal-drift-x), var(--petal-drop-y), 0) rotate(300deg);
+  }
+}
+
+.logo-head img {
+  position: relative;
+  z-index: 1;
+  width: min(220px, 56vw);
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .logo-head img {
+    will-change: transform;
+    animation: logo-float 4.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+}
+
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  35% {
+    transform: translate3d(0, -7px, 0) scale(1.022);
+  }
+
+  50% {
+    transform: translate3d(0, -10px, 0) scale(1.028);
+  }
+
+  75% {
+    transform: translate3d(0, -5px, 0) scale(1.014);
+  }
+}

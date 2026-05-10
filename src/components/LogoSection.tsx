@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import '../styles/components/LogoSection.css';
 
 /**
  * Bloque visual del logotipo.

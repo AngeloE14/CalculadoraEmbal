@@ -4,6 +4,7 @@
  */
 
 import { memo, type ReactNode } from 'react';
+import '../styles/components/ResultsSection.css';
 import { useCalculatorResults } from '../hooks/useCalculator';
 import { formatMlAndOz, formatNumber } from '../utils/formatters';
 import { MixProgress } from './MixProgress';

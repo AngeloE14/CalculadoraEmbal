@@ -4,6 +4,7 @@
  */
 
 import { memo } from 'react';
+import '../styles/components/ShareActions.css';
 
 interface ShareActionsProps {
   shareFeedback: string;

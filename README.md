@@ -21,15 +21,17 @@ Aplicación web para calcular formulación arterial de embalsamamiento, migrada 
 ```text
 .
 ├── public/
-│   └── assets/                 # Imágenes, audio y script de tema inicial
+│   └── assets/                 # Imágenes, audio y scripts públicos usados por la app
 ├── src/
-│   ├── components/             # Bloques visuales reutilizables
+│   ├── components/             # Bloques visuales reutilizables de React
 │   ├── hooks/                  # Estado global y lógica de interacción
-│   ├── pages/                  # Composición de pantallas
-│   ├── styles/                 # Sistema visual y temas
-│   ├── utils/                  # Lógica pura (cálculo, perfiles, formato)
+│   ├── pages/                  # Composición de pantallas y páginas
+│   ├── styles/                 # Estilos globales y de componentes
+│   │   ├── components/         # CSS de cada componente en su propia hoja
+│   │   └── global.css          # Estilos compartidos, variables y layout global
+│   ├── utils/                  # Lógica pura (cálculo, perfiles, formateo)
 │   ├── App.tsx                 # Raíz de componentes
-│   └── main.tsx                # Punto de entrada React
+│   └── main.tsx                # Punto de entrada React y carga del CSS global
 ├── docs/                       # Documentación técnica y pedagógica en español
 ├── index.html                  # Shell HTML mínimo (contiene #root)
 └── vite.config.ts              # Configuración de desarrollo/build
@@ -99,7 +101,7 @@ npm run preview:lan
 1. Crea archivo en `src/components/NuevoComponente.tsx`.
 2. Define responsabilidad única y props tipadas.
 3. Si consume estado global, usa el hook mínimo necesario (`useCalculatorForm` o `useCalculatorResults`).
-4. Añade clases en `src/styles/style.css` evitando `transition: all`.
+5. Crea la hoja de estilos del componente en `src/styles/components/NuevoComponente.css` y mantenla cerca del componente.
 5. Integra el componente en la página/sección correspondiente.
 
 ## Buenas prácticas del proyecto

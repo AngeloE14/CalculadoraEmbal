@@ -4,6 +4,7 @@
  */
 
 import { memo } from 'react';
+import '../styles/components/MixProgress.css';
 import { formatNumber } from '../utils/formatters';
 
 interface MixProgressProps {

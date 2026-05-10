@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import './styles/style.css';
+import './styles/global.css';
 
 // `main.tsx` es el punto de entrada real de React.
 // Aquí conectamos React con el nodo `#root` del `index.html`.
